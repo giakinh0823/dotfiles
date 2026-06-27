@@ -17,7 +17,8 @@ dotfiles/
 │   └── config               # cấu hình terminal Ghostty
 ├── vim/
 │   ├── vscode.vim           # keybindings vim (VSCode Vim)
-│   └── ideavimrc            # cấu hình IdeaVim (IntelliJ / JetBrains IDEs)
+│   ├── ideavimrc            # cấu hình IdeaVim (IntelliJ / JetBrains IDEs)
+│   └── vimrc                # cấu hình terminal Vim (macOS)
 └── git/
     └── .gitconfig
 ```
@@ -55,6 +56,8 @@ ln -sf "$PWD/zsh/.p10k.zsh"         ~/.p10k.zsh
 ln -sf "$PWD/git/.gitconfig"        ~/.gitconfig
 ln -sf "$PWD/vim/vscode.vim"        ~/vscode.vim
 ln -sf "$PWD/vim/ideavimrc"         ~/.ideavimrc   # cần cài plugin IdeaVim trong IDE
+mkdir -p ~/.vim/undo
+ln -sf "$PWD/vim/vimrc"             ~/.vimrc       # terminal Vim (brew install vim)
 
 mkdir -p ~/.config/tmux
 ln -sf ~/.local/share/tmux/oh-my-tmux/.tmux.conf ~/.config/tmux/tmux.conf

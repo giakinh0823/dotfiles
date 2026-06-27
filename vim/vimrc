@@ -1,0 +1,299 @@
+" =============================================================================
+"  ~/.vimrc  —  Terminal Vim (macOS)
+"  Port từ vim/ideavimrc + vim/vscode.vim, bổ sung default cho mượt.
+"  Yêu cầu: brew install vim (đã có +clipboard). Symlink: ~/.vimrc -> dotfiles/vim/vimrc
+" =============================================================================
+
+" ----- Cơ bản -----------------------------------------------------------------
+set nocompatible              " bật full Vim, tắt chế độ vi
+filetype plugin indent on     " nhận diện filetype + indent theo ngôn ngữ
+syntax on                     " bật syntax highlight
+set encoding=utf-8
+set fileencoding=utf-8
+
+" =============================================================================
+"  PLUGINS  (vim-plug)  —  cài lần đầu:  vim +PlugInstall +qall
+"  Quản lý plugin giống TPM của tmux. Tự cài plug.vim nếu chưa có.
+" =============================================================================
+let s:plug = expand('~/.vim/autoload/plug.vim')
+if empty(glob(s:plug))
+  silent execute '!curl -fLo '.s:plug.' --create-dirs '
+        \ 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+  " --- Học Vim / khám phá phím ---
+  Plug 'liuchengxu/vim-which-key'          " popup gợi ý phím <leader> (như cheatsheet)
+  " --- Soạn thảo ---
+  Plug 'tpope/vim-surround'                " cs\"' ds( ysiw) ... (thay 'set surround')
+  Plug 'tpope/vim-repeat'                  " cho . lặp được lệnh của plugin
+  Plug 'tpope/vim-commentary'              " gcc / gc comment nhanh
+  Plug 'jiangmiao/auto-pairs'              " tự đóng ngoặc/quote
+  " --- Syntax / màu ---
+  Plug 'sheerun/vim-polyglot'              " syntax ~600 ngôn ngữ
+  Plug 'ghifarit53/tokyonight-vim'         " colorscheme Tokyo Night
+  " --- Tìm kiếm mờ (fzf) ---
+  Plug '/opt/homebrew/opt/fzf'             " binary fzf (brew)
+  Plug 'junegunn/fzf.vim'                  " :Files :Rg :Buffers ...
+  " --- File explorer / giao diện ---
+  Plug 'preservim/nerdtree'                " cây thư mục
+  Plug 'vim-airline/vim-airline'           " statusline đẹp
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'airblade/vim-gitgutter'            " dấu +/-/~ thay đổi git ở cột trái
+  " --- Autocomplete / LSP (như IntelliSense) ---
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+call plug#end()
+
+" ----- Giao diện / hiển thị ---------------------------------------------------
+set number                    " số dòng
+set relativenumber            " số dòng tương đối (giống ideavimrc)
+set showmode
+set showcmd                   " hiện phím đang gõ ở góc dưới
+set showmatch                 " nháy cặp ngoặc khớp
+set scrolloff=4               " luôn chừa 4 dòng quanh con trỏ
+set sidescrolloff=8
+set cursorline                " highlight dòng hiện tại
+set laststatus=2              " luôn hiện statusline
+set ruler
+set wildmenu                  " menu autocomplete lệnh
+set wildmode=longest:full,full
+if has('termguicolors')
+  set termguicolors           " màu 24-bit (terminal hiện đại như Ghostty)
+endif
+
+" ----- Colorscheme: Tokyo Night ----------------------------------------------
+set background=dark
+let g:tokyonight_style = 'night'        " 'night' (tối) hoặc 'storm' (xanh xám)
+let g:tokyonight_enable_italic = 1
+let g:tokyonight_transparent_background = 0
+silent! colorscheme tokyonight          " silent! để không lỗi nếu chưa cài
+
+" ----- Tìm kiếm ---------------------------------------------------------------
+set incsearch                 " nhảy tới kết quả khi đang gõ (từ ideavimrc)
+set hlsearch                  " highlight tất cả kết quả
+set ignorecase                " bỏ qua hoa/thường...
+set smartcase                 " ...trừ khi gõ chữ hoa
+
+" ----- Thụt lề / tab ----------------------------------------------------------
+set autoindent
+set smartindent
+set expandtab                 " tab -> space
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4
+
+" ----- Hành vi chung ----------------------------------------------------------
+set hidden                    " chuyển buffer không cần lưu
+set mouse=a                   " bật chuột (resize/scroll/select)
+set backspace=indent,eol,start
+set splitbelow splitright     " split mở xuống dưới / sang phải
+set ttyfast
+set lazyredraw                " mượt hơn khi chạy macro
+set updatetime=300
+set noerrorbells
+set visualbell t_vb=          " tắt beep + nháy màn hình
+set clipboard=                " GIỮ register Vim tách biệt clipboard;
+                              " clipboard chỉ truy cập qua mapping "+ bên dưới
+
+" ----- Undo bền vững (giữ undo sau khi đóng file) -----------------------------
+if has('persistent_undo')
+  set undofile
+  set undodir=~/.vim/undo//
+endif
+
+let mapleader=" "             " <leader> = Space (từ ideavimrc)
+
+" =============================================================================
+"  CUSTOM MAPPINGS  (port từ ideavimrc / vscode.vim)
+" =============================================================================
+
+" ----- Change INSIDE cặp ngoặc gần nhất (nhảy tới ngoặc rồi ci) ---------------
+nnoremap cb <Left>/[()]<CR>"_cib
+nnoremap ch <Left>/[()]<CR>"_cib
+nnoremap cv <Left>/[{}]<CR>"_ciB
+nnoremap cB <Left>/[{}]<CR>"_ciB
+nnoremap cq <Left>/[{}]<CR>"_ciB
+nnoremap cd <Left>/[[\]]<CR>"_ci[
+nnoremap c" <Left>/"<CR>"_ci"
+nnoremap cl <Left>/"<CR>"_ci"
+nnoremap c' <Left>/'<CR>"_ci'
+nnoremap c` <Left>/`<CR>"_ci`
+
+" ----- Delete INSIDE cặp ngoặc / quote ---------------------------------------
+nnoremap dq diB
+nnoremap dl <Left>/"<CR>"_di"
+nnoremap d' <Left>/'<CR>"_di'
+nnoremap d` <Left>/`<CR>"_di`
+nnoremap db <Left>/[()]<CR>"_dib
+
+" r -> F (tìm ngược ký tự); ghi đè 'replace char' mặc định
+nnoremap r F
+
+" ----- Visual: select INSIDE cặp ngoặc gần nhất (u-prefix) -------------------
+vnoremap ub <C-C><Left>/[()]<CR>vib
+vnoremap uh <C-C><Left>/[()]<CR>vib
+vnoremap uv <C-C><Left>/[{}]<CR>viB
+vnoremap uB <C-C><Left>/[{}]<CR>viB
+vnoremap uq <C-C><Left>/[{}]<CR>viB
+vnoremap ud <C-C><Left>/[[\]]<CR>vi[
+vnoremap u" <C-C><Left>/"<CR>vi"
+vnoremap ul <C-C><Left>/"<CR>vi"
+vnoremap u' <C-C><Left>/'<CR>vi'
+
+" ----- Lưu / thoát ------------------------------------------------------------
+" LƯU Ý: Ctrl-S cần 'stty -ixon' trong shell, nếu không terminal sẽ bị đơ.
+map  <C-S> :w<CR>
+nnoremap Q :q<CR>
+
+" Visual-block: chuyển sang <C-T> vì <C-V> đã dùng để paste clipboard
+nnoremap <C-T> <C-Q>
+
+" ----- Chọn / yank ------------------------------------------------------------
+map <C-A> GVgg                " select all (ghi đè increment number)
+map <C-Y> "+y                 " yank vào clipboard hệ thống
+map Y "+y$                    " yank tới cuối dòng -> clipboard
+noremap X v$<Left>            " select tới cuối dòng (trừ ký tự cuối)
+
+" Xoá mọi mark A-Z, 0-9
+nnoremap dm :delm A-Z0-9<CR>
+
+" ----- Search & replace nhanh -------------------------------------------------
+nnoremap <C-H> :%s//gc<Left><Left><Left>
+vnoremap <C-H> :s//gc<Left><Left><Left>
+
+" ----- Paste từ clipboard hệ thống bằng Ctrl-V (2 mode) ----------------------
+imap <C-V> <Esc>"+pi
+nmap <C-V> "+p
+vmap <C-V> "+p
+
+" ----- Change/delete dùng black-hole register (không ghi đè yank) ------------
+noremap c "_c
+noremap cc "_S
+nnoremap C "_c$
+vnoremap p "_dP             " paste trong visual mà không nuốt mất register
+
+" Join giữ nguyên vị trí con trỏ
+nnoremap J mzJ`z
+
+" ----- Insert mode tiện ích ---------------------------------------------------
+inoremap <C-j> <C-N>         " autocomplete: chọn kế tiếp
+inoremap <C-k> <C-P>         " autocomplete: chọn trước đó
+inoremap <C-l> <Right>
+
+" Enter (Ctrl-M) -> increment number (vì <C-A> đã bị ghi đè thành select-all)
+noremap <C-M> <C-A>
+
+" ----- Terminal mode (:terminal của Vim) -------------------------------------
+tnoremap <C-Q> <C-\><C-n>    " thoát terminal mode về normal
+tnoremap <C-K> <Up>
+
+" ----- Khác -------------------------------------------------------------------
+nnoremap R yyp               " nhân đôi dòng
+nnoremap U <C-R>             " U = redo
+nnoremap cw "_ciw
+nnoremap cW "_ciW
+nnoremap ct "_cit
+
+" ----- Text-object cho method / class (cần filetype hỗ trợ ]m [m) ------------
+vnoremap im <C-C>]Mv[m
+vnoremap ic <C-C>][v[[
+
+nnoremap cid "_ci[
+nnoremap civ "_ciB
+
+" ----- Alias text-object: i<ký tự> / a<ký tự> --------------------------------
+vnoremap ih ib
+vnoremap iv iB
+vnoremap iq iB
+vnoremap id i[
+vnoremap il i"
+vnoremap ah ab
+vnoremap av aB
+vnoremap aq aB
+vnoremap ad a[
+vnoremap al a"
+
+" Bỏ highlight tìm kiếm nhanh
+nnoremap <silent> <leader>h :nohlsearch<CR>
+
+" =============================================================================
+"  IDE-ONLY (IdeaVim <Action>...) — KHÔNG chạy trên terminal Vim thuần.
+"  Muốn có rename/extract/debug... cần plugin LSP: coc.nvim / vim-lsp / ALE.
+"  Để lại đây làm tham chiếu; mở comment khi đã cài plugin tương ứng.
+" -----------------------------------------------------------------------------
+" map <leader>r <Action>(RenameElement)
+" map <leader>s <Action>(SurroundWith)        " thay bằng tpope/vim-surround
+" map <leader>v <Action>(IntroduceVariable)
+" map <leader>m <Action>(ExtractMethod)
+" map <leader>b <Action>(ToggleLineBreakpoint)
+" map <leader>e <Action>(SelectInProjectView)  " thay bằng :Explore / netrw
+" ... (xem đầy đủ trong vim/ideavimrc)
+
+" =============================================================================
+"  CẤU HÌNH PLUGIN
+" =============================================================================
+
+" ----- which-key: bấm Space rồi đợi -> popup gợi ý phím ----------------------
+set timeoutlen=500            " thời gian chờ trước khi hiện popup (ms)
+nnoremap <silent> <leader> :<C-u>WhichKey '<Space>'<CR>
+vnoremap <silent> <leader> :<C-u>WhichKeyVisual '<Space>'<CR>
+
+" ----- NERDTree: cây thư mục -------------------------------------------------
+nnoremap <leader>e :NERDTreeToggle<CR>
+nnoremap <leader>E :NERDTreeFind<CR>|        " hiện file hiện tại trong cây
+let NERDTreeShowHidden=1
+
+" ----- fzf: tìm file / nội dung mờ -------------------------------------------
+nnoremap <C-p> :Files<CR>|                   " tìm file (như Cmd+P)
+nnoremap <leader>fb :Buffers<CR>
+nnoremap <leader>fg :Rg<CR>|                  " tìm text toàn project (ripgrep)
+nnoremap <leader>fl :BLines<CR>|             " tìm dòng trong file hiện tại
+
+" ----- airline ---------------------------------------------------------------
+let g:airline_powerline_fonts = 1            " bạn đã có Nerd Font (p10k)
+let g:airline#extensions#tabline#enabled = 1 " hiện tab/buffer ở trên
+let g:airline_theme = 'tokyonight'           " statusline khớp colorscheme
+
+" ----- gitgutter -------------------------------------------------------------
+set signcolumn=yes                           " luôn chừa cột dấu (tránh giật)
+
+" ----- coc.nvim: autocomplete + LSP (giống IntelliSense) ---------------------
+" Tự cài các 'coc extension' này lần đầu chạy vim:
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver', 'coc-pyright',
+      \ 'coc-html', 'coc-css', 'coc-yaml', 'coc-prettier']
+
+" Tab/Shift-Tab để chọn gợi ý, Enter để xác nhận
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+let g:AutoPairsMapCR = 0                      " để coc xử lý Enter (tránh xung đột)
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+      \ : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Điều hướng code (Goto)
+nmap <silent> gd <Plug>(coc-definition)|       " tới định nghĩa
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)|       " tìm chỗ dùng
+nmap <silent> [g <Plug>(coc-diagnostic-prev)|  " lỗi trước
+nmap <silent> ]g <Plug>(coc-diagnostic-next)|  " lỗi sau
+
+" Rename / Code action / xem doc  (thay cho <Action>... của IdeaVim)
+nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>ca <Plug>(coc-codeaction-cursor)
+nnoremap <silent> K :call <SID>ShowDocumentation()<CR>
+function! s:ShowDocumentation() abort
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction

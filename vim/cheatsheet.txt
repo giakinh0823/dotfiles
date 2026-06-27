@@ -1,0 +1,57 @@
+=============================================================
+ TERMINAL VIM — CHEATSHEET   (leader = Space)
+ Mẹo: bấm Space rồi ĐỢI ~0.5s -> popup which-key hiện gợi ý phím
+=============================================================
+
+── PLUGIN ───────────────────────────────────────────────────
+ :PlugInstall      cài plugin mới (sau khi thêm vào vimrc)
+ :PlugUpdate       cập nhật plugin
+ :PlugClean        xoá plugin đã gỡ khỏi vimrc
+
+── TÌM KIẾM (fzf) ───────────────────────────────────────────
+ Ctrl-p            tìm file (như Cmd+P)
+ <leader>fg        tìm text toàn project (ripgrep)
+ <leader>fb        danh sách buffer đang mở
+ <leader>fl        tìm dòng trong file hiện tại
+   (trong fzf: Ctrl-j/k chọn, Enter mở, Esc thoát)
+
+── FILE EXPLORER (NERDTree) ─────────────────────────────────
+ <leader>e         bật/tắt cây thư mục
+ <leader>E         hiện file hiện tại trong cây
+   (trong cây: o mở, t mở tab, s split dọc, i split ngang)
+
+── AUTOCOMPLETE / LSP (coc.nvim) ────────────────────────────
+ Tab / Shift-Tab   chọn gợi ý lên/xuống
+ Enter             xác nhận gợi ý
+ gd                tới định nghĩa        gr   tìm chỗ dùng
+ gy                tới type definition   gi   tới implementation
+ K                 xem doc (hover)
+ [g  /  ]g         lỗi trước / lỗi sau
+ <leader>rn        đổi tên (rename) toàn project
+ <leader>ca        code action (quick fix)
+
+── SOẠN THẢO (surround / commentary) ────────────────────────
+ cs"'   đổi "..."  thành '...'
+ ds(    xoá cặp ( )
+ ysiw)  bọc từ bằng ( )
+ gcc    comment/bỏ comment dòng
+ gc     (visual) comment vùng chọn
+
+── PHÍM CUSTOM CỦA BẠN (từ ideavimrc) ───────────────────────
+ Ctrl-s            lưu file (:w)        Q     thoát (:q)
+ Ctrl-a            select all           Ctrl-t  visual-block
+ Ctrl-y / Y        yank -> clipboard    Ctrl-v  paste clipboard
+ Ctrl-h            search & replace (:%s//gc)
+ R                 nhân đôi dòng        U     redo
+ J                 join (giữ con trỏ)
+ cb/ch  ci()       cv/cB/cq  ci{}       cd  ci[]
+ cw/cW/ct          change inner word/WORD/tag (không nuốt yank)
+ ub/uh/uv/ud...    (visual) select trong cặp ngoặc gần nhất
+
+── DI CHUYỂN CƠ BẢN (vim gốc) ───────────────────────────────
+ h j k l           trái xuống lên phải
+ w / b             đầu từ tiếp / trước  0 / $   đầu / cuối dòng
+ gg / G            đầu / cuối file      Ctrl-d/u  cuộn nửa trang
+ /text  +  n/N     tìm, tới kết quả tiếp/trước
+ <leader>h         tắt highlight tìm kiếm
+ :%s/a/b/g         thay tất cả a -> b
