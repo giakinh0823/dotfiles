@@ -1,0 +1,16 @@
+# Secrets / history — không bao giờ commit
+*.local.secret
+.env
+*.pem
+*.key
+id_rsa*
+.zsh_history
+.viminfo
+
+# Thư mục tải về (cài lại bằng script, không lưu trong repo)
+.oh-my-zsh/
+oh-my-tmux/
+tmux/plugins/
+
+# macOS
+.DS_Store

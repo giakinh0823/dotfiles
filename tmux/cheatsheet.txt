@@ -1,0 +1,74 @@
+
+  tmux — phao cứu sinh                          (nhấn q để đóng)
+
+  prefix = Ctrl-a (hoặc Ctrl-b)
+  cách dùng: nhấn prefix, thả ra, rồi nhấn phím lệnh
+  ví dụ "prefix c" = giữ Ctrl gõ a, thả ra, rồi gõ c
+
+  khái niệm:
+    session = một phiên làm việc, chứa nhiều cửa sổ
+    window  = một cửa sổ (giống tab trên trình duyệt)
+    pane    = một ô khi chia nhỏ màn hình trong cửa sổ
+
+
+  cơ bản
+    prefix d        thoát ra, session vẫn chạy ngầm (detach)
+    prefix /        mở bảng này
+    prefix ?        xem tất cả phím tắt
+    prefix e        sửa file cấu hình
+    prefix r        nạp lại cấu hình
+
+  session (phiên làm việc)
+    tmux                tạo session mới (gõ ở terminal)
+    tmux ls             liệt kê các session đang chạy
+    tmux a              gắn lại session gần nhất (attach)
+    tmux a -t tên       gắn lại session theo tên
+    tmux kill-session -t tên   xoá một session
+    prefix s            xem & chuyển giữa các session
+    prefix $            đổi tên session hiện tại
+    prefix Ctrl-c       tạo session mới (đang trong tmux)
+    prefix Ctrl-f       tìm & nhảy tới session theo tên
+    prefix Shift-Tab    quay lại session vừa dùng
+
+  window (cửa sổ / tab)
+    prefix c        tạo cửa sổ mới
+    prefix ,        đổi tên cửa sổ
+    prefix 0..9     nhảy tới cửa sổ theo số
+    prefix Ctrl-h   cửa sổ trước
+    prefix Ctrl-l   cửa sổ kế
+    prefix Tab      cửa sổ vừa dùng
+    prefix w        chọn cửa sổ từ danh sách
+    prefix &        đóng cửa sổ
+
+  pane (chia màn hình)
+    prefix -        chia ngang (pane mới ở dưới)
+    prefix _        chia dọc  (pane mới bên phải)
+    prefix h j k l  chuyển focus sang pane trái / dưới / trên / phải
+    prefix o        chuyển focus sang pane kế tiếp
+    prefix H J K L  chỉnh kích thước pane (giữ để lặp)
+    prefix +        phóng to pane (nhấn lại để thu)
+    prefix x        đóng pane
+
+  đổi chỗ pane / đổi layout
+    prefix >        đẩy pane sang phải (đổi chỗ với pane kế)
+    prefix <        đẩy pane sang trái (đổi chỗ với pane trước)
+    prefix g        biến pane hiện tại thành pane chính (main, to bên trái)
+    prefix Ctrl-o   xoay vòng tất cả pane
+    prefix !        tách pane hiện tại thành cửa sổ riêng
+    prefix Alt-1    layout: chia ngang đều nhau
+    prefix Alt-2    layout: chia dọc đều nhau
+    prefix Alt-3    layout: 1 pane chính trên, còn lại xếp dưới
+    prefix Alt-4    layout: 1 pane chính trái, còn lại xếp phải
+    prefix Alt-5    layout: lưới đều (tiled)
+
+  copy / cuộn lịch sử
+    prefix Enter    vào chế độ cuộn xem lại màn hình
+      v             bắt đầu bôi đen
+      y             copy rồi thoát
+      Esc           thoát chế độ cuộn
+    prefix ]        dán
+
+  chuột (đang bật)
+    click chọn pane · kéo viền để chỉnh kích thước
+    lăn để cuộn · bôi đen để copy
+    prefix m        bật / tắt chuột
