@@ -23,6 +23,27 @@ set-hook -g client-attached 'bind -T root C-Space show-wk-menu-root ; bind -T pr
 # Muốn main nằm ngang (to bên trên) thì sau đó nhấn prefix Alt-3.
 bind g swap-pane -s '{top-left}' \; select-pane -t '{top-left}' \; select-layout main-vertical
 
+# -- status bar theme ----------------------------------------------------------
+# Đơn sắc xám tối, hợp theme Vercel/glass của terminal (bỏ vàng/hồng/xanh chói).
+# status-left: session | uptime  -> nền xám tối, chữ xám sáng
+tmux_conf_theme_status_left_fg="#9e9e9e,#bcbcbc,#9e9e9e"
+tmux_conf_theme_status_left_bg="#1c1c1c,#262626,#1c1c1c"
+# cửa sổ đang active: highlight xám-trắng thay vì xanh dương chói
+tmux_conf_theme_window_status_current_fg="#080808"
+tmux_conf_theme_window_status_current_bg="#bcbcbc"
+# cửa sổ không active: chữ xám mờ
+tmux_conf_theme_window_status_fg="#6c6c6c"
+# status-right: pin | giờ | ngày | user | host -> xám tối, bỏ nền đỏ ở host
+tmux_conf_theme_status_right_fg="#9e9e9e,#bcbcbc,#e4e4e4"
+tmux_conf_theme_status_right_bg="#1c1c1c,#262626,#303030"
+# viền pane active: xám trắng nhẹ thay vì xanh
+tmux_conf_theme_pane_active_border="#bcbcbc"
+# thanh pin: đơn sắc (đầy = xám sáng, rỗng = xám tối) thay vì gradient đỏ→xanh
+#   định dạng: full_fg,empty_fg,bg
+tmux_conf_battery_bar_palette="#bcbcbc,#444444,none"
+tmux_conf_battery_hbar_palette="#bcbcbc,#444444,none"
+tmux_conf_battery_vbar_palette="#bcbcbc,#444444,none"
+
 # -- plugins -------------------------------------------------------------------
 # tpm được oh-my-tmux tự quản; chỉ cần khai báo bằng cú pháp '@plugin'.
 # (KHÔNG thêm 'tmux-plugins/tpm' hay dòng 'run .../tpm' — oh-my-tmux tự lo.)
