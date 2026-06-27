@@ -1,8 +1,0 @@
-[user]
-	name = giakinh0823
-	email = giakinh2000@gmail.com
-[core]
-	autocrlf = input
-[credential]
-	helper = !aws codecommit credential-helper $@
-	UseHttpPath = true
