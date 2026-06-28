@@ -48,3 +48,24 @@ tmux_conf_battery_vbar_palette="#bcbcbc,#444444,none"
 # tpm được oh-my-tmux tự quản; chỉ cần khai báo bằng cú pháp '@plugin'.
 # (KHÔNG thêm 'tmux-plugins/tpm' hay dòng 'run .../tpm' — oh-my-tmux tự lo.)
 set -g @plugin 'alexwforsythe/tmux-which-key'
+
+# -- lưu/khôi phục session ra disk ---------------------------------------------
+# tmux-resurrect: lưu & khôi phục toàn bộ session (cửa sổ, pane, layout, thư mục
+# làm việc, chương trình đang chạy) ra disk.
+#   prefix Ctrl-s  -> lưu thủ công
+#   prefix Ctrl-r  -> khôi phục thủ công
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+# khôi phục cả NỘI DUNG bên trong từng pane (scrollback)
+set -g @resurrect-capture-pane-contents 'on'
+# khôi phục session vim/neovim đã lưu (cần plugin session trong vim, vd vim-obsession)
+set -g @resurrect-strategy-vim 'session'
+set -g @resurrect-strategy-nvim 'session'
+
+# tmux-continuum: tự ĐỘNG lưu định kỳ + tự khôi phục khi mở tmux lên
+# -> đóng terminal / reboot máy xong mở lại là session vẫn còn.
+# LƯU Ý: continuum nên là plugin được khai báo CUỐI CÙNG.
+set -g @plugin 'tmux-plugins/tmux-continuum'
+# tự khôi phục session gần nhất ngay khi tmux server khởi động
+set -g @continuum-restore 'on'
+# tự lưu mỗi 15 phút (đơn vị: phút)
+set -g @continuum-save-interval '15'
